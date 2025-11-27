@@ -9,6 +9,6 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 file(GLOB SRC_FILES "${CMAKE_SOURCE_DIR}/src/*.cpp")
 file(GLOB HEADER_FILES "${CMAKE_SOURCE_DIR}/include/*.hpp")
 
-add_executable(main.exe ${SRC_FILES} ${HEADER_FILES})
+add_executable(main ${SRC_FILES} ${HEADER_FILES})
 
-target_include_directories(main.exe PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_include_directories(main PRIVATE ${CMAKE_SOURCE_DIR}/include)

@@ -1,0 +1,30 @@
+#pragma once
+
+#include <string>
+#include <unordered_map>
+#include "word_attributes.hpp"
+
+class Lexicon {
+private:
+    std::unordered_map<std::string, WordData> data;
+    size_t next_id = 0;
+
+public:
+    size_t add(const std::string& word, size_t count = 1);
+
+    bool present_in(const std::string& word) const;
+
+    size_t getID(const std::string& word) const;
+
+    size_t getFrequency(const std::string& word) const;
+
+    size_t size() const { return data.size(); }
+
+    void save(const std::string& path) const;
+
+    bool load(const std::string& path);
+
+    void print_top_words(int n) const;
+
+    void clear_lex();
+};
