@@ -1,20 +1,22 @@
 #include <iostream>
+#include <vector>
 #include <unordered_map>
-#include "forward_index.hpp"
 #include "lexicon.hpp"
+#include "forward_index.hpp"
+#include "inverted_index.hpp"
 
-// Utility: build per-document WordData using Lexicon
+// Utility: build word-map from tokens for ForwardIndex
 std::unordered_map<std::string, WordData> build_word_map(
     Lexicon& lexicon, const std::vector<std::string>& tokens)
 {
     std::unordered_map<std::string, WordData> word_map;
-
+    
     for (const auto& token : tokens) {
-        size_t id = lexicon.add(token); // Assign word_id globally
+        size_t id = lexicon.add(token); // Assign global ID
 
         auto& wd = word_map[token];
         wd.word_id = id;
-        wd.frequency++;   // Count frequency in this document
+        wd.frequency++;  // Count frequency in this document
     }
     return word_map;
 }
@@ -22,57 +24,74 @@ std::unordered_map<std::string, WordData> build_word_map(
 int main() {
     Lexicon lex;
     ForwardIndex fwd;
+    InvertedIndex inv;
 
-    std::cout << "\n=== Registering Documents ===\n";
-
-    // Document 0
-    std::vector<std::string> doc0 = {"deep", "learning", "is", "deep", "powerful"};
+    // === Register Documents ===
+    std::vector<std::string> doc0 = {"machine", "learning", "is", "machine", "powerful"};
     auto map0 = build_word_map(lex, doc0);
     fwd.register_document("UID-A1", map0);
 
-    // Document 1
-    std::vector<std::string> doc1 = {"machine", "learning", "is", "popular"};
+    std::vector<std::string> doc1 = {"deep", "learning", "drives", "AI"};
     auto map1 = build_word_map(lex, doc1);
     fwd.register_document("UID-A2", map1);
 
-    // Document 2
-    std::vector<std::string> doc2 = {"deep", "neural", "networks", "are", "powerful"};
+    std::vector<std::string> doc2 = {"machine", "intelligence", "is", "growing"};
     auto map2 = build_word_map(lex, doc2);
     fwd.register_document("UID-A3", map2);
 
-    std::cout << "\n=== ForwardIndex Stats ===\n";
-    fwd.show_statistics();  // Total docs and term counts
+    std::cout << "\n=== ForwardIndex Statistics ===\n";
+    fwd.show_statistics();
 
-    std::cout << "\n=== Checking terms in Document 0 ===\n";
+    std::cout << "\n=== Terms in Document 0 ===\n";
     if (auto terms = fwd.fetch_terms(0)) {
         for (const auto& t : *terms)
-            std::cout << "WordID: " << t.word_id << ", Freq: " << t.frequency << "\n";
+            std::cout << "WordID: " << t.word_id << " | Freq: " << t.frequency << "\n";
     }
 
-    std::cout << "\n=== Checking Document Metadata ===\n";
-    for (size_t i = 0; i < 3; i++) {
-        if (auto meta = fwd.fetch_cord_uid(i)) {
-            std::cout << "Doc " << i << " -> CordUID = " << *meta << "\n";
-        }
+    // === Build Inverted Index ===
+    inv.add_from_forward(fwd);
+
+    std::cout << "\n=== InvertedIndex Contents ===\n";
+    for (const auto& pair : inv.get_inv_index()) {
+        std::cout << "WordID " << pair.first << " -> Docs: ";
+        for (auto d : pair.second) std::cout << d << " ";
+        std::cout << "\n";
     }
 
-    // Save to file
-    std::cout << "\nSaving ForwardIndex to D:/forward.txt...\n";
+    // === Testing Search-like Behavior ===
+    std::string query = "machine";
+    size_t qid = lex.getID(query);
+    auto results = inv.fetch_doc_ids(qid);
+
+    std::cout << "\nSearch Results for word '" << query 
+              << "' (ID=" << qid << "): ";
+    if (results) {
+        for (auto d : *results) std::cout << d << " ";
+    }
+    std::cout << "\n";
+
+    // === Save to File ===
+    inv.save_to_file("D:/inverted.csv");
     fwd.save_to_file("D:/forward.txt");
 
-    // Now load into NEW instance
+    std::cout << "\nIndexes saved successfully!\n";
+
+    // === Reload and Test Again ===
+    InvertedIndex inv2;
     ForwardIndex fwd2;
-    std::cout << "\nLoading ForwardIndex into new object...\n";
+
+    inv2.load_from_file("D:/inverted.csv");
     fwd2.load_from_file("D:/forward.txt");
+
+    std::cout << "\n=== Reloaded InvertedIndex ===\n";
+    for (const auto& pair : inv2.get_inv_index()) {
+        std::cout << "WordID " << pair.first << " -> ";
+        for (auto doc : pair.second) std::cout << doc << " ";
+        std::cout << "\n";
+    }
 
     std::cout << "\n=== Reloaded ForwardIndex Stats ===\n";
     fwd2.show_statistics();
-
-    std::cout << "\n=== Checking Reloaded Terms for Document 0 ===\n";
-    if (auto terms2 = fwd2.fetch_terms(0)) {
-        for (const auto& t : *terms2)
-            std::cout << "WordID: " << t.word_id << ", Freq: " << t.frequency << "\n";
-    }
 
     return 0;
 }
