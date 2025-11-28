@@ -136,7 +136,7 @@ bool ForwardIndex::load_from_file(const std::string& input_path)
             data.frequency = freq;
             terms.push_back(data);
         }
-
+        std::sort(terms.begin(), terms.end(), compare_by_word_id);
         forward_index[doc_id] = std::move(terms);
     }
 

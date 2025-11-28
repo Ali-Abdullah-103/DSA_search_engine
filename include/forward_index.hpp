@@ -12,6 +12,7 @@ private:
 
     // Mapping: doc numeric ID → cord_uid (or other metadata)
     //cord_uid is a unique identifier of doc, specified in dataset
+    //We arent using cord_uid directly in previous hashmap because its a string, and hashmap will take too much space
     std::unordered_map<size_t, std::string> doc_metadata;
 
     size_t next_id = 0;
