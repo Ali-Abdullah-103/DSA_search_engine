@@ -1,7 +1,6 @@
 #include <iostream>
 #include "inverted_index.hpp"
 #include "forward_index.hpp"
-#include "word_attributes.hpp"
 #include <vector>
 #include <fstream>
 #include <sstream>
@@ -16,7 +15,7 @@ void InvertedIndex::add_from_forward(const ForwardIndex& forward_index)
         const auto* terms = forward_index.fetch_terms(i);
         if (terms) {
             for (size_t j = 0; j < terms->size(); j++) {
-                size_t wordID = (*terms)[j].word_id;
+                size_t wordID = (*terms)[j].first;
                 if (inverted_index[wordID].empty() || inverted_index[wordID].back() != i) {
                     inverted_index[wordID].push_back(i);
                 }
@@ -84,7 +83,6 @@ bool InvertedIndex::load_from_file(std::string path)
         while (std::getline(ss, token, ',')) { // remaining tokens are doc_ids
             doc_ids.push_back(std::stoull(token));
         }
-
         inverted_index[word_id] = std::move(doc_ids);
     }
     return true;

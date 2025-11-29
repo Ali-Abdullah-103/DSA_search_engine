@@ -3,26 +3,23 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include "word_attributes.hpp"
 
 class ForwardIndex {
 private:
     // Mapping: doc numeric ID → list of (word_id, frequency)
-    std::unordered_map<size_t, std::vector<WordData>> forward_index;
+    std::unordered_map<size_t, std::vector<std::pair<size_t,size_t>>> forward_index;
 
     // Mapping: doc numeric ID → cord_uid (or other metadata)
-    //cord_uid is a unique identifier of doc, specified in dataset
-    //We arent using cord_uid directly in previous hashmap because its a string, and hashmap will take too much space
-    std::unordered_map<size_t, std::string> doc_metadata;
+    std::unordered_map<size_t, std::string> docid_to_corduid;
 
     size_t next_id = 0;
 
 public:
     // Insert a new document with its word-frequency data
-    size_t register_document(const std::string& cord_uid, const std::unordered_map<std::string, WordData>& word_map);
+    size_t register_document(const std::string& cord_uid, const std::unordered_map<std::string, std::pair<size_t,size_t>>& word_map);
 
     // Access terms (words) of a document
-    const std::vector<WordData>* fetch_terms(size_t doc_id) const;
+    const std::vector<std::pair<size_t,size_t>>* fetch_terms(size_t doc_id) const;
 
     // Get original cord_uid
     const std::string* fetch_cord_uid(size_t doc_id) const;

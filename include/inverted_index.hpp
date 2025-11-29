@@ -1,8 +1,6 @@
 #pragma once
-
 #include <iostream>
 #include <unordered_map>
-#include "word_attributes.hpp"
 #include "forward_index.hpp"
 #include <string>
 

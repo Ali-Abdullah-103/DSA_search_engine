@@ -2,11 +2,10 @@
 
 #include <string>
 #include <unordered_map>
-#include "word_attributes.hpp"
 
 class Lexicon {
 private:
-    std::unordered_map<std::string, WordData> data;
+    std::unordered_map<std::string, std::pair<size_t,size_t>> data;
     size_t next_id = 0;
 
 public:
@@ -24,7 +23,7 @@ public:
 
     bool load(const std::string& path);
 
-    void print_top_words(int n) const;
+    void show_statistics() const;
 
     void clear_lex();
 };
