@@ -1,34 +1,29 @@
+#include "MetadataParser.hpp"
+#include "lexicon.hpp"
+#include "forward_index.hpp"
+#include "inverted_index.hpp"
 #include <iostream>
-#include <fstream>
-#include <vector>
-#include <string>
-#include "MetaDataParser.hpp"   // only for parse_csv_line
 
-int main() 
-{
+int main() {
+    Lexicon lex;
+    ForwardIndex fwd;
+    InvertedIndex inv;
 
-    MetadataParser m("D:/searchEngine/data/2020-04-10/metadata.csv");
-    std::ifstream file("D:/searchEngine/data/2020-04-10/metadata.csv");
-    if (!file.is_open()) {
-        std::cerr << "Error opening metadata.csv\n";
-        return 1;
-    }
+    MetadataParser parser;
 
-    std::string line;
-    int line_count = 0;
+    size_t max_docs = 100; // Try with smaller batch first
+    int processed = parser.metadata_parse(lex, fwd, inv, max_docs);
 
-    while (line_count < 4 && std::getline(file, line)) {
-        std::vector<std::string> fields;
-        m.parse_line(line, fields);
+    std::cout << "\n=== Indexing Complete ===\n";
+    std::cout << "Documents processed: " << processed << "\n";
+    lex.show_statistics();
+    fwd.show_statistics();
 
-        std::cout << "\nLine " << line_count + 1 << ":\n";
-        for (size_t i = 0; i < fields.size(); i++) {
-            std::cout << "[" << i << "] " << fields[i] << "\n";
-        }
+    // ----- Save to files -----
+    lex.save("D:/searchEngine/indices/lexicon.csv");
+    fwd.save_to_file("D:/searchEngine/indices/forward_index.txt");
+    inv.save_to_file("D:/searchEngine/indices/inverted_index.csv");
 
-        line_count++;
-    }
-
-    file.close();
+    std::cout << "\nIndexes saved successfully!\n";
     return 0;
 }
