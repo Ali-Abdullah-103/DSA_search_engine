@@ -5,6 +5,7 @@
 
 class Lexicon {
 private:
+    //Mapping word -> wordID + frequency(in all docs)
     std::unordered_map<std::string, std::pair<size_t,size_t>> data;
     size_t next_id = 0;
 
