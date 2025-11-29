@@ -21,7 +21,7 @@ public:
     void parse_line(const std::string&, std::vector<std::string>&);
 
     //finds fulltext JSON file path (checks pmcid first, then sha)
-    std::string find_fulltext_file(const std::string& pmcid,
+    std::string get_file_path(const std::string& pmcid,
                                    const std::string& sha,
                                    const std::string& license) const;
 

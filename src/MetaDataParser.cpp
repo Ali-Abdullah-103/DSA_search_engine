@@ -35,19 +35,17 @@ std::string MetadataParser::extract_first_sha(const std::string& sha) const {
 }
 
 
-std::string MetadataParser::find_fulltext_file(const std::string& pmcid,
-                                               const std::string& sha,
-                                               const std::string& license) const
+std::string MetadataParser::get_file_path(const std::string& pmcid, const std::string& sha, const std::string& license) const
 {
     // Try PMC-based JSON first
     if (!pmcid.empty()) {
-        std::vector<std::string> xml_search_paths = {
-            data_path + "/comm_use_subset/pmc_json/" + pmcid + ".xml.json",
-            data_path + "/noncomm_use_subset/pmc_json/" + pmcid + ".xml.json",
-            data_path + "/custom_license/pmc_json/" + pmcid + ".xml.json"
+        const std::vector<std::string> pmc_folders = {
+            "comm_use_subset",
+            "noncomm_use_subset",
+            "custom_license"
         };
-
-        for (const auto& path : xml_search_paths) {
+        for (const auto& folder : pmc_folders) {
+            std::string path = data_path + "/" + folder + "/pmc_json/" + pmcid + ".xml.json";
             if (std::filesystem::exists(path)) {
                 return path;
             }
@@ -57,14 +55,14 @@ std::string MetadataParser::find_fulltext_file(const std::string& pmcid,
     // Try SHA-based PDF JSON
     std::string first_sha = extract_first_sha(sha);
     if (!first_sha.empty()) {
-        std::vector<std::string> pdf_search_paths = {
-            data_path + "/comm_use_subset/pdf_json/" + first_sha + ".json",
-            data_path + "/noncomm_use_subset/pdf_json/" + first_sha + ".json",
-            data_path + "/custom_license/pdf_json/" + first_sha + ".json",
-            data_path + "/biorxiv_medrxiv/pdf_json/" + first_sha + ".json"
+        const std::vector<std::string> pdf_folders = {
+            "comm_use_subset",
+            "noncomm_use_subset",
+            "custom_license",
+            "biorxiv_medrxiv"
         };
-
-        for (const auto& path : pdf_search_paths) {
+        for (const auto& folder : pdf_folders) {
+            std::string path = data_path + "/" + folder + "/pdf_json/" + first_sha + ".json";
             if (std::filesystem::exists(path)) {
                 return path;
             }
