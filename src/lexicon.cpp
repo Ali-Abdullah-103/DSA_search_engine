@@ -100,8 +100,7 @@ bool Lexicon::load(const std::string& path) {
 }
 
 void Lexicon::show_statistics() const {
-    std::cout << "Total unique words: " << data.size() << "\n";
-    std::cout << "Id of next word to be inserted: " << next_id << "\n";
+    std::cout << "Total unique words in lexicon: " << data.size() << "\n";
 }
 
 void Lexicon::clear_lex() 

@@ -32,7 +32,4 @@ public:
 
     // Stats
     size_t total_documents() const { return forward_index.size(); }
-    size_t total_terms() const;
-
-    void show_statistics() const;
 };
