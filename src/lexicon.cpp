@@ -101,6 +101,15 @@ bool Lexicon::load(const std::string& path) {
 
 void Lexicon::show_statistics() const {
     std::cout << "Total unique words in lexicon: " << data.size() << "\n";
+
+    size_t total_freq = 0;
+    for (const auto& entry : data)
+        total_freq += entry.second.second;
+
+    double avg_freq = static_cast<double>(total_freq) / data.size();
+
+    std::cout << "Total word occurrences (all documents): " << total_freq << "\n";
+    std::cout << "Average frequency per word: " << avg_freq << "\n";
 }
 
 void Lexicon::clear_lex() 
