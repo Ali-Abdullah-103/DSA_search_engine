@@ -6,11 +6,15 @@
 #include <sstream>
 #include <algorithm>
 
+//comparator for sorting by word_id
+bool sort_by_word_id(const std::pair<size_t, std::vector<size_t>>& a, const std::pair<size_t, std::vector<size_t>>& b)
+{
+    return a.first < b.first;
+}
 
 //Making Inverted Index using Forward index
 void InvertedIndex::add_from_forward(const ForwardIndex& forward_index)
 {
-    size_t wordID;
     for(size_t i = 0; i < forward_index.total_documents(); i++) {
         const auto* terms = forward_index.fetch_terms(i);
         if (terms) {
@@ -21,6 +25,11 @@ void InvertedIndex::add_from_forward(const ForwardIndex& forward_index)
                 }
             }
         }
+    }
+    //After making inv_index, sort its documents list and remove suplicates
+    for (auto& [word_id, doc_list] : inverted_index) {
+    std::sort(doc_list.begin(), doc_list.end());
+    doc_list.erase(std::unique(doc_list.begin(), doc_list.end()), doc_list.end());
     }
 }
 
@@ -41,10 +50,17 @@ void InvertedIndex::save_to_file(std::string path)
     if (!file.is_open()) {
         return;
     }
-    //Write total size on top of file
-    file << inverted_index.size() << "\n";
 
-    for(const auto& values : inverted_index) {
+    //covert hashmap to vector for sorting
+    std::vector<std::pair<size_t, std::vector<size_t>>> vec(
+        inverted_index.begin(), inverted_index.end());
+
+    std::sort(vec.begin(), vec.end(), sort_by_word_id);
+
+    // Write total word count
+    file << vec.size() << "\n";
+
+    for(const auto& values : vec) {
         const size_t word_id = values.first;
         //for sorting the doc_ids
         std::vector<size_t> sorted_ids = values.second;

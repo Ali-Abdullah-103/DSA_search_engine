@@ -2,6 +2,7 @@
 #include "nlohmann_json.hpp"
 #include <string>
 #include <vector>
+#include <unordered_set>
 #include "MetaDataParser.hpp"
 #include <filesystem>
 #include <fstream>
@@ -86,8 +87,8 @@ std::string MetadataParser::extract_text_from_json(const std::string& file_path)
     if (!file.is_open())
         return "";
 
-    nlohmann::json j;               // uses nlohmann/json
-    file >> j;           // parses JSON file
+    nlohmann::json j;     //using nlohmann_json for parsing
+    file >> j;           
 
     std::string text;
 
@@ -104,7 +105,7 @@ std::string MetadataParser::extract_text_from_json(const std::string& file_path)
 int MetadataParser::metadata_parse(Lexicon& lex,
                                    ForwardIndex& fwd,
                                    InvertedIndex& inv,
-                                   size_t max_docs)   // <-- added limit
+                                   size_t max_docs) 
 {
     std::ifstream csv("D:/searchEngine/data/2020-04-10/metadata.csv");
     if (!csv.is_open()) {
@@ -140,29 +141,21 @@ int MetadataParser::metadata_parse(Lexicon& lex,
             full_text += extract_text_from_json(json_path);
         }
 
+        //Size too small meaning we couldnt get the doc
         if (full_text.size() < 50) continue;
 
-        //------------------------------------------------------------------
-        // Tokenize here directly, without adding function to Lexicon:
-        //------------------------------------------------------------------
+
+        std::vector<std::string> tokens = tokenize(full_text);
+
+        //for storing freq of words for a specific doc, changes every iteration
         std::unordered_map<std::string, size_t> local_freq;
-        std::string clean, word;
-
-        for (char ch : full_text) {
-            if (std::isalpha(static_cast<unsigned char>(ch)))
-                clean += std::tolower(ch);
-            else
-                clean += ' ';
+        for (const auto& token : tokens) {
+            local_freq[token]++;
         }
 
-        std::stringstream ss(clean);
-        while (ss >> word) {
-            local_freq[word]++;
-        }
-
-        //------------------------------------------------------------------
-        // Now push words into Lexicon and build word_map for ForwardIndex:
-        //------------------------------------------------------------------
+       
+        //Pushing words in word_map (changes every iteration) for forward_index
+        //At the same time, pushing in lexicon
         std::unordered_map<std::string, std::pair<size_t,size_t>> word_map;
 
         for (const auto& entry : local_freq) {
@@ -176,4 +169,58 @@ int MetadataParser::metadata_parse(Lexicon& lex,
     }
     inv.add_from_forward(fwd);
     return processed_count;
+}
+
+
+//Some common words which dont have are not to be stored in lexicon
+std::unordered_set<std::string> common_words = {
+    "a", "about", "above", "after", "again", "against", "all", "am", "an",
+    "and", "any", "are", "aren't", "as", "at", "be", "because", "been",
+    "before", "being", "below", "between", "both", "but", "by", "can't",
+    "cannot", "could", "couldn't", "did", "didn't", "do", "does", "doesn't",
+    "doing", "don't", "down", "during", "each", "few", "for", "from",
+    "further", "had", "hadn't", "has", "hasn't", "have", "haven't", "having",
+    "he", "he'd", "he'll", "he's", "her", "here", "here's", "hers", "herself",
+    "him", "himself", "his", "how", "how's", "i", "i'd", "i'll", "i'm",
+    "i've", "if", "in", "into", "is", "isn't", "it", "it's", "its", "itself",
+    "let's", "me", "more", "most", "mustn't", "my", "myself", "no", "nor",
+    "not", "of", "off", "on", "once", "only", "or", "other", "ought", "our",
+    "ours", "ourselves", "out", "over", "own", "same", "shan't", "she",
+    "she'd", "she'll", "she's", "should", "shouldn't", "so", "some", "such",
+    "than", "that", "that's", "the", "their", "theirs", "them", "themselves",
+    "then", "there", "there's", "these", "they", "they'd", "they'll",
+    "they're", "they've", "this", "those", "through", "to", "too", "under",
+    "until", "up", "very", "was", "wasn't", "we", "we'd", "we'll", "we're",
+    "we've", "were", "weren't", "what", "what's", "when", "when's", "where",
+    "where's", "which", "while", "who", "who's", "whom", "why", "why's",
+    "with", "won't", "would", "wouldn't", "you", "you'd", "you'll", "you're",
+    "you've", "your", "yours", "yourself", "yourselves", "one", "two", "using", "also", "can","however", "may"};
+
+
+
+// Basic tokenizer: lowercase, remove special chars, split, remove common words
+std::vector<std::string> MetadataParser::tokenize(const std::string& text) const
+{
+    std::string clean;
+    clean.reserve(text.size());
+
+    //keep letters and spaces only
+    for (char ch : text) {
+        if (std::isalpha(static_cast<unsigned char>(ch))) {   // C++ check for alphabet
+            clean += static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
+        } else {
+            clean += ' ';  // normalize everything else to space
+        }
+    }
+    //splitting using stringstream
+    std::stringstream ss(clean);
+    std::string word;
+    std::vector<std::string> tokens;
+
+    while (ss >> word) {
+        if (word.size() < 3) continue;              //filter tiny words
+        if (common_words.count(word)) continue;      //filter common words
+        tokens.push_back(word);
+    }
+    return tokens;
 }

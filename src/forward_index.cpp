@@ -4,9 +4,19 @@
 #include <iostream>
 #include <algorithm>
 
+//comparator for sorting by word_id
 bool compare_by_word_id(const std::pair<size_t,size_t>& a, const std::pair<size_t,size_t>& b) {
     return a.first < b.first;
 }
+
+//comparator for sorting by doc_id
+bool compare_by_doc_id(const std::pair<size_t, std::vector<std::pair<size_t,size_t>>>& a,
+                       const std::pair<size_t, std::vector<std::pair<size_t,size_t>>>& b)
+{
+    return a.first < b.first;   
+}
+
+
 
 size_t ForwardIndex::register_document(const std::string& cord_uid, const std::unordered_map<std::string, std::pair<size_t,size_t>>& word_map)
 {
@@ -43,20 +53,6 @@ const std::string* ForwardIndex::fetch_cord_uid(size_t doc_id) const
     return &meta_target->second;
 }
 
-size_t ForwardIndex::total_terms() const
-{
-    size_t count = 0;
-    for (const auto& entry : forward_index) {
-        count += entry.second.size();
-    }
-    return count;
-}
-
-void ForwardIndex::show_statistics() const
-{
-    std::cout << "Total documents: " << total_documents() << '\n';
-    std::cout << "Total term entries: " << total_terms() << '\n';
-}
 
 void ForwardIndex::save_to_file(const std::string& output_path) const
 {
@@ -64,8 +60,13 @@ void ForwardIndex::save_to_file(const std::string& output_path) const
     if (!file.is_open()) {
         return;
     }
+
+    //convert hashmap to a pair vector for sorting.
+    std::vector<std::pair<size_t, std::vector<std::pair<size_t,size_t>>>> vec(forward_index.begin(), forward_index.end());
+
+    std::sort(vec.begin(), vec.end(), compare_by_doc_id);
     file << forward_index.size() << '\n';
-    for (const auto& doc_pair : forward_index)
+    for (const auto& doc_pair : vec)
     {
         size_t doc_id = doc_pair.first;
         const auto& terms = doc_pair.second;
@@ -82,6 +83,7 @@ void ForwardIndex::save_to_file(const std::string& output_path) const
     }
     file.close();
 }
+
 
 bool ForwardIndex::load_from_file(const std::string& input_path)
 {
