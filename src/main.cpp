@@ -11,7 +11,7 @@ int main() {
 
     MetadataParser parser;
 
-    size_t max_docs = 1000; //let's say process first 1000 docs
+    size_t max_docs = 100; //let's say process first 1000 docs
     int processed = parser.metadata_parse(lex, fwd, inv, max_docs);
 
     std::cout << "\n----- Indexing Complete -----\n";
