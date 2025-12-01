@@ -1,0 +1,89 @@
+{
+    "paper_id": "PMC193621",
+    "metadata": {
+        "title": "A new recruit for the army of the men of death",
+        "authors": [
+            {
+                "first": "Gregory",
+                "middle": [
+                    "A"
+                ],
+                "last": "Petsko",
+                "suffix": "",
+                "email": "petsko@brandeis.edu",
+                "affiliation": {}
+            }
+        ]
+    },
+    "body_text": [
+        {
+            "text": "The message was dated Tuesday, 2 June 2003. \"From the Executive Committee, XIX International Congress of Biochemistry & Molecular Biology: After careful consideration, the 2003 Congress Executive and Steering Committees have concluded that it is in the best interest of all delegates, exhibitors, sponsors and partners that the IUBMB Congress scheduled for Toronto this July 20-24 be cancelled. On April 29 we issued a worldwide message informing you that the first outbreak of SARS and the travel alert issued by the Center for Disease Control and travel advisory issued by the World Health Organization were being monitored and, at that time, we thought the worst was over and the Congress could proceed as planned. With the most recent outbreak of SARS being reported so close to the Congress we have heard from many individuals concerned that if they were to attend the meeting in Toronto and be exposed to SARS they could potentially spread the disease to others in their health-care system including colleagues and patients. The number of participants and speakers has dropped to the point that it is no longer possible to hold a successful congress.\"",
+            "cite_spans": [],
+            "section": "",
+            "ref_spans": []
+        },
+        {
+            "text": "Ironically, the day of that message, news stories were circulating all over the world that the epidemic of SARS (severe acute respiratory syndrome) had peaked and was starting to taper off. SARS, which appears to be caused by a new strain of coronavirus, kills around 10% of those infected; interestingly, mortality seems to arise from the severity of the victim's own immune response rather than from any toxic effect of the virus per se. The outbreaks in Vietnam and Canada have largely been confined to health-care workers and patients in hospitals; in Hong Kong and China, the disease spread beyond that. Although ten times as many people die each day from malaria than have died in toto from SARS, this new infectious disease has crippled the economies of cities and countries, caused some places to institute draconian quarantine measures reminiscent of the days of the Black Death, and generally scared the living daylights out of most of Asia and a good chunk of the rest of the world. So now the army of the men of death, in John Bunyan's memorable phrase, has a new recruit, and fear has a new face: a face wearing a surgical mask.",
+            "cite_spans": [],
+            "section": "",
+            "ref_spans": []
+        },
+        {
+            "text": "I think one reason for the extreme fear is that SARS is passed from person to person. There is something in human nature that makes us more afraid of other people than, for example, of insects, even though insect-borne diseases have killed, and continue to kill, far more than any human-transmitted illness. Added to that is our fear of the new and unknown: we live with influenza, a much more dangerous disease, because we are used to it. Consequently, SARS has caused much more economic damage than its prevalence warrants.",
+            "cite_spans": [],
+            "section": "",
+            "ref_spans": []
+        },
+        {
+            "text": "SARS has brought home the importance of being able to trust your government. One of the reasons it spread as it did in some countries is that people did not believe what they were told, and fled from or to the cities, taking the disease with them. It has also reemphasized the folly of commingling humans and livestock as we do. Farming practices that raise chickens and wild birds - both notorious reservoirs of viruses - in the same pens as pigs, whose immune system resembles ours sufficiently that an avian virus that learns to adapt to swine can often jump to humans, must be stopped. Controls also need to be instituted on open-air markets where a huge variety of live wild animals, many of uncertain provenance, are often held in close proximity to one another and to throngs of people.",
+            "cite_spans": [],
+            "section": "",
+            "ref_spans": []
+        },
+        {
+            "text": "SARS has also demonstrated that the immediate impact of genomics on human health is not in the over-hyped realm of finding cures to all manner of complex conditions such as cancer and heart disease. It is in the development of technologies that will revolutionize public health. The complete genome sequence of the SARS-associated coronavirus was obtained less than two months after the disease was first identified, which is surely a record. It was obtained by the whole-genome shotgun sequencing method that was developed for much larger microbial and mammalian genomes. And even before that, DeRisi and associates at the University of California San Francisco used one of the great tools of genomics, the cDNA microarray, to identify the SARS virus as a coronavirus. It took them only about 24 hours after receiving their first tissue sample, with the aid of a microarray containing gene fragments from 1,000 different viruses, to type SARS as a new strain of coronavirus, suggesting that this technology could be invaluable in the first days of, for example, a biowarfare incident.",
+            "cite_spans": [],
+            "section": "",
+            "ref_spans": []
+        },
+        {
+            "text": "Yet the story of SARS to date has also highlighted our ignorance. We have the complete genome sequence of the virus, yet we cannot state with certainty how many genes it contains, which are expressed under what conditions, or which are essential for human infectivity and virulence. Clearly, our ability to gather information about genes has outstripped our ability to interpret that information, and much work will be needed to understand what even a simple genome sequence implies.",
+            "cite_spans": [],
+            "section": "",
+            "ref_spans": []
+        },
+        {
+            "text": "Just as the SARS epidemic seems to be coming under control - this year, anyway; it remains to be seen if it will become endemic anywhere - other candidates are queuing at the recruiting station. Since the mid-1970s, about 30 new infectious diseases have cropped up, ranging from AIDS (for which 45 million new infections are predicted between now and 2010) to Ebola virus, a new outbreak of which is still raging in Africa as I write this. The Netherlands has been wrestling with a new strain of avian influenza that has devastated its poultry farms - about 20% of the country's chickens have had to be slaughtered - and infected 80 humans, one of whom has died. Twelve confirmed cases of monkeypox, a disease related to smallpox but previously unknown in the Western Hemisphere, have just been reported in Wisconsin and several other midwestern US states; another 50 or so unconfirmed cases are under investigation. Prairie dogs, cute little rodents that have recently become popular as pets, appear to be the immediate source of human infection; they, in turn, were probably infected by a West African rat kept at the same pet supplier. Monkeypox is much less lethal than smallpox, causing fatalities in only a small proportion of cases (for smallpox it can be 30% or more), and even that figure comes from developing countries where those infected are less healthy overall and available medical care is less sophisticated, so there is probably no reason to be concerned yet. Still, this incident is yet another example of how vulnerable even the developed world can be to diseases that were formerly considered Someone Else's Problem. And West Nile virus, another developing world disease that has now become endemic in the US, is about to pay its annual mosquito-borne visit as the summer commences.",
+            "cite_spans": [],
+            "section": "",
+            "ref_spans": []
+        },
+        {
+            "text": "In considering how we respond to these threats, I would contend that market forces are fine for controlling some things but disastrous for others. Left to themselves, pharmaceutical manufacturers phased out many of their infectious disease programs during the last few decades of the twentieth century because, thanks to antibiotics, there didn't seem to be a market for new antiinfectives in the West, or in the developed countries of the Far East. But now, along with the 'new' plagues, a number of 'old' diseases, such as tuberculosis (Bunyan's \"Captain of all the men of death\"), staphylococcus, enterococcus and streptococcus infections, are turning up in drug-resistant forms, and suddenly there is a scramble to resurrect these old research programs, and microbiology is becoming a fashionable discipline again.",
+            "cite_spans": [],
+            "section": "",
+            "ref_spans": []
+        },
+        {
+            "text": "No better argument for the importance of basic research programs at universities need be sought. If academic research followed fashion, and only did what was immediately believed to be relevant - or worse, only did what industry and government thought was needed - there might be no reservoir of expertise for situations such as the one we now face. The rise of infectious diseases emphasizes the importance of universities as guardians of old knowledge as well as discoverers of new. Funding agencies and academic administrators need to ensure that fields don't die out prematurely. None of us is smart enough to predict what will be important in the future.",
+            "cite_spans": [],
+            "section": "",
+            "ref_spans": []
+        },
+        {
+            "text": "Our generation has grown up not knowing what it was like when every wound was potentially life-threatening, when every cough could signal a deadly illness. But the line between our blithe present and the frightening past is finer than we like to think. For proof, all we have to do is look at what happens when the public health infrastructure is neglected, or worse, collapses altogether. Diphtheria is once again endemic in parts of the former Soviet Union. Cholera epidemics are occurring with disturbing frequency in parts of India, Bangladesh, and Africa. Over 100,000 people are believed to have died from infectious disease outbreaks in Iraq following the first Gulf War, and serious public health issues are developing in southern Iraq following the latest one.",
+            "cite_spans": [],
+            "section": "",
+            "ref_spans": []
+        },
+        {
+            "text": "Infectious diseases aren't making a comeback; they never left. SARS is merely the latest reminder that, no matter how clever we are, the men of death are always out there, waiting. And the men of death are always hungry.",
+            "cite_spans": [],
+            "section": "",
+            "ref_spans": []
+        }
+    ],
+    "ref_entries": {},
+    "back_matter": [],
+    "bib_entries": {}
+}
