@@ -9,14 +9,13 @@ bool compare_by_word_id(const std::pair<size_t,size_t>& a, const std::pair<size_
     return a.first < b.first;
 }
 
+
 //comparator for sorting by doc_id
 bool compare_by_doc_id(const std::pair<size_t, std::vector<std::pair<size_t,size_t>>>& a,
                        const std::pair<size_t, std::vector<std::pair<size_t,size_t>>>& b)
 {
     return a.first < b.first;   
 }
-
-
 
 size_t ForwardIndex::register_document(const std::string& cord_uid, const std::unordered_map<std::string, std::pair<size_t,size_t>>& word_map)
 {

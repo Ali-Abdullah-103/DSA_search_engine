@@ -40,24 +40,8 @@ std::string MetadataParser::extract_first_sha(const std::string& sha) const {
 
 std::string MetadataParser::get_file_path(const std::string& pmcid, const std::string& sha) const
 {
-
     const std::string data_path = "D:/searchEngine/data/2020-04-10";
-    // Try PMC-based JSON first
-    if (!pmcid.empty()) {
-        const std::vector<std::string> pmc_folders = {
-            "comm_use_subset",
-            "noncomm_use_subset",
-            "custom_license"
-        };
-        for (const auto& folder : pmc_folders) {
-            std::string path = data_path + "/" + folder + "/pmc_json/" + pmcid + ".xml.json";
-            if (std::filesystem::exists(path)) {
-                return path;
-            }
-        }
-    }
-
-    // Try SHA-based PDF JSON
+        // Try SHA-based PDF JSON
     std::string first_sha = extract_first_sha(sha);
     if (!first_sha.empty()) {
         const std::vector<std::string> pdf_folders = {
@@ -68,6 +52,21 @@ std::string MetadataParser::get_file_path(const std::string& pmcid, const std::s
         };
         for (const auto& folder : pdf_folders) {
             std::string path = data_path + "/" + folder + "/pdf_json/" + first_sha + ".json";
+            if (std::filesystem::exists(path)) {
+                return path;
+            }
+        }
+    }
+    
+    // Try PMC-based JSON 
+    if (!pmcid.empty()) {
+        const std::vector<std::string> pmc_folders = {
+            "comm_use_subset",
+            "noncomm_use_subset",
+            "custom_license"
+        };
+        for (const auto& folder : pmc_folders) {
+            std::string path = data_path + "/" + folder + "/pmc_json/" + pmcid + ".xml.json";
             if (std::filesystem::exists(path)) {
                 return path;
             }
