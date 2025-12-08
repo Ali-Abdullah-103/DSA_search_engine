@@ -4,6 +4,7 @@
 #include <vector>
 #include <unordered_set>
 #include "MetaDataParser.hpp"
+#include "lemmatizer.hpp"
 #include <filesystem>
 #include <fstream>
 #include <sstream>
@@ -40,7 +41,7 @@ std::string MetadataParser::extract_first_sha(const std::string& sha) const {
 
 std::string MetadataParser::get_file_path(const std::string& pmcid, const std::string& sha) const
 {
-    const std::string data_path = "D:/searchEngine/data/2020-04-10";
+    const std::string data_path = "D:/DSA Project/DSA_search_engine/data/data/2020-04-10";
         // Try SHA-based PDF JSON
     std::string first_sha = extract_first_sha(sha);
     if (!first_sha.empty()) {
@@ -97,7 +98,7 @@ std::string MetadataParser::extract_text_from_json(const std::string& file_path)
             text += block.value("text", "") + " ";
         }
     }
-    return text;
+    return text; 
 }
 
 
@@ -106,7 +107,7 @@ int MetadataParser::metadata_parse(Lexicon& lex,
                                    InvertedIndex& inv,
                                    size_t max_docs) 
 {
-    std::ifstream csv("D:/searchEngine/data/2020-04-10/metadata.csv");
+    std::ifstream csv("D:/DSA Project/DSA_search_engine/data/data/2020-04-10/metadata.csv");
     if (!csv.is_open()) {
         std::cerr << "Error: Cannot open metadata.csv\n";
         return 0;
@@ -219,7 +220,7 @@ std::vector<std::string> MetadataParser::tokenize(const std::string& text) const
     while (ss >> word) {
         if (word.size() < 3) continue;              //filter tiny words
         if (common_words.count(word)) continue;      //filter common words
-        tokens.push_back(word);
+        tokens.push_back(lemmatize(word));
     }
     return tokens;
 }
