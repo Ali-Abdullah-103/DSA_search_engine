@@ -20,86 +20,111 @@ void InvertedIndex::add_from_forward(const ForwardIndex& forward_index)
         if (terms) {
             for (size_t j = 0; j < terms->size(); j++) {
                 size_t wordID = (*terms)[j].first;
-                if (inverted_index[wordID].empty() || inverted_index[wordID].back() != i) {
-                    inverted_index[wordID].push_back(i);
+                size_t barrelID = get_barrel_id(wordID);
+                auto &barrel = barrels[barrelID];
+                if (barrel[wordID].empty() || barrel[wordID].back() != i) {
+                    barrel[wordID].push_back(i);
                 }
             }
         }
     }
     //After making inv_index, sort its documents list and remove suplicates
-    for (auto& [word_id, doc_list] : inverted_index) {
-    std::sort(doc_list.begin(), doc_list.end());
-    doc_list.erase(std::unique(doc_list.begin(), doc_list.end()), doc_list.end());
+    for (auto& barrelPair : barrels){
+        for (auto& [word_id, doc_list] : barrelPair.second) {
+            std::sort(doc_list.begin(), doc_list.end());
+            doc_list.erase(std::unique(doc_list.begin(), doc_list.end()), doc_list.end());
     }
+    }
+    
 }
 
 
 const std::vector<size_t>* InvertedIndex::fetch_doc_ids(size_t word_id) const 
 {
-    auto target = inverted_index.find(word_id);
-    if (target == inverted_index.end()) {
-        return nullptr;
-    }
-    return &target->second;
+    size_t barrelID = get_barrel_id(word_id);            
+
+    auto barrelTarget = barrels.find(barrelID);                 
+    if (barrelTarget == barrels.end()) return nullptr;           
+
+    auto wordTarget = barrelTarget->second.find(word_id);             
+    if (wordTarget == barrelTarget->second.end()) return nullptr;      
+
+    return &wordTarget->second;
 }
 
 
-void InvertedIndex::save_to_file(std::string path) 
+void InvertedIndex::save_to_file(std::string basePath) 
 {
-    std::ofstream file(path);
-    if (!file.is_open()) {
-        return;
-    }
+    for (const auto &barrel_pair : barrels) {
+        size_t barrel_id = barrel_pair.first;
+        std::string file_name = basePath + "_barrel" + std::to_string(barrel_id) + ".csv";
+        std::ofstream file(file_name);
+        if (!file.is_open()) continue;
 
-    //covert hashmap to vector for sorting
-    std::vector<std::pair<size_t, std::vector<size_t>>> vec(
-        inverted_index.begin(), inverted_index.end());
+        file << barrel_pair.second.size() << "\n";
 
-    std::sort(vec.begin(), vec.end(), sort_by_word_id);
+        std::vector<std::pair<size_t, std::vector<size_t>>> vec(
+            barrel_pair.second.begin(), barrel_pair.second.end());
+             std::sort(vec.begin(), vec.end(), sort_by_word_id);
 
-    // Write total word count
-    file << vec.size() << "\n";
-
-    for(const auto& values : vec) {
-        const size_t word_id = values.first;
-        //for sorting the doc_ids
-        std::vector<size_t> sorted_ids = values.second;
-        std::sort(sorted_ids.begin(), sorted_ids.end());
-
-        file << word_id;
-        for(const auto& curr_id : sorted_ids) {
-            file << "," << curr_id;
+        for (const auto &p : vec) {
+            file << p.first; 
+            for (const auto &doc_id : p.second) {
+                file << "," << doc_id;
+            }
+            file << "\n";
         }
-        file << "\n";
     }
-    file.close();
 }
 
 
 
-bool InvertedIndex::load_from_file(std::string path) 
+bool InvertedIndex::load_from_file(std::string basePath) 
 {
-    std::ifstream file(path);
-    if (!file.is_open()) {
-        return false;
-    }
+    barrels.clear();  // Start fresh
 
-    inverted_index.clear();
-    std::string line;    //skip first line (has size of inv_index)
-    std::getline(file, line);
+    // Try loading barrel_0, barrel_1, barrel_2 ... until a file does NOT exist.
+    for (size_t barrel_id = 0;; ++barrel_id) {
 
-    while(getline(file, line)) {
-        std::istringstream ss(line);
-        std::string token;
+        std::string file_name = basePath + "_barrel" + std::to_string(barrel_id) + ".idx";
+        std::ifstream file(file_name);
 
-        std::getline(ss, token, ','); // get word_id first
-        size_t word_id = std::stoull(token);
+        // Stop if this barrel file does NOT exist
+        if (!file.is_open())
+            break;
 
-        std::vector<size_t> doc_ids;
-        while (std::getline(ss, token, ',')) { // remaining tokens are doc_ids
-            doc_ids.push_back(std::stoull(token));
+        std::unordered_map<size_t, std::vector<size_t>> barrel;
+
+        std::string line;
+
+        // First line contains the number of word entries — we ignore it
+        std::getline(file, line);
+
+        // Each following line contains:
+        // word_id,doc1,doc2,doc3,...
+        while (std::getline(file, line)) {
+
+            std::istringstream ss(line);
+            std::string token;
+
+            // First token = word_id
+            std::getline(ss, token, ',');
+            size_t word_id = std::stoull(token);
+
+            // Rest are doc IDs
+            std::vector<size_t> docs;
+            while (std::getline(ss, token, ',')) {
+                docs.push_back(std::stoull(token));
+            }
+
+            // Insert posting list into this barrel
+            barrel[word_id] = std::move(docs);
         }
-        inverted_index[word_id] = std::move(doc_ids);
+
+        // Store barrel in main structure
+        barrels[barrel_id] = std::move(barrel);
     }
-    return true;
+
+    // Return false if no files were loaded
+    return !barrels.empty();
 }
