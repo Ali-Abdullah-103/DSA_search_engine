@@ -27,4 +27,8 @@ public:
     void show_statistics() const;
 
     void clear_lex();
+
+    const std::unordered_map<std::string, std::pair<size_t,size_t>>& get_data() const {
+         return data; 
+    }
 };

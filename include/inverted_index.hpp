@@ -8,7 +8,7 @@ class InvertedIndex {
 
 private:
 //Mapping word_id -> doc_id (from forward_index)
-static const size_t BARREL_SIZE = 3000;
+static const size_t BARREL_SIZE = 30000;
 
 std::unordered_map<size_t, std::unordered_map<size_t, std::vector<size_t>>> barrels;
 

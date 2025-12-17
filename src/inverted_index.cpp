@@ -86,7 +86,7 @@ bool InvertedIndex::load_from_file(std::string basePath)
     // Try loading barrel_0, barrel_1, barrel_2 ... until a file does NOT exist.
     for (size_t barrel_id = 0;; ++barrel_id) {
 
-        std::string file_name = basePath + "_barrel" + std::to_string(barrel_id) + ".idx";
+        std::string file_name = basePath + "_barrel" + std::to_string(barrel_id) + ".csv";
         std::ifstream file(file_name);
 
         // Stop if this barrel file does NOT exist
