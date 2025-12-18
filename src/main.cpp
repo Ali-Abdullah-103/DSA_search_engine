@@ -43,24 +43,23 @@ int main()
     }
     semantic_search.load_metadata("D:/DSA Project/DSA_search_engine/data/data/2020-04-10/metadata.csv");
 
-    // Load GloVe embeddings
-    std::cout << "Loading GloVe embeddings...\n";
-    if (!semantic_search.load_glove_embeddings("D:/DSA Project/glove/glove.6B.300d.txt")) {
-        std::cerr << "Failed to load GloVe embeddings!\n";
+    std::cout << "\nLoading GloVe word embeddings...\n";
+    if (!semantic_search.load_embeddings_binary("D:/DSA Project/DSA_search_engine/embedding/glove_embeddings.bin")) {
+        std::cerr << "Error: Cannot load GloVe embeddings from bin/glove_embeddings.bin\n";
+        std::cerr << "Make sure you have created this file first!\n";
         return 1;
     }
-
-    std::cout << "Saving to binary file...\n";
-    semantic_search.save_embeddings_binary("D:/DSA Project/DSA_search_engine/embedding/glove_embeddings.bin");
+    std::cout << "Loading document embeddings...\n";
     
-    std::cout << "\n✓ Setup complete! Next time, load from binary file.\n";
+    if (!semantic_search.load_document_embeddings("D:/DSA Project/DSA_search_engine/embedding/doc_embeddings.bin")) {
+        std::cerr << "Error: Cannot load document embeddings from bin/doc_embeddings.bin\n";
+        std::cerr << "Make sure you have created this file first!\n";
+        return 1;
+    }
     
-    semantic_search.build_document_embeddings(fwd, lex);
-    semantic_search.save_document_embeddings("D:/DSA Project/DSA_search_engine/embedding/doc_embeddings.bin");
-    std::cout << "Document embeddings saved for next time!\n";
 
 
-    /*
+    
     std::cout << "Search engine ready.\n";
     std::cout << "Type a query.\n";
     std::cout << "Use '?prefix' for auto-complete.\n";
@@ -93,6 +92,7 @@ int main()
             std::cout << "\n";
             continue;
         }
+        
         // ---- SEARCH MODE ----
         auto results = engine.search(input, lex, fwd, inv, 10);
 
@@ -117,5 +117,5 @@ int main()
     }
     return 0;
     } 
-    */
+    
 }

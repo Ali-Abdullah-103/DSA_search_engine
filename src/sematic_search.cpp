@@ -430,7 +430,7 @@ bool SemanticSearch::load_metadata(const std::string& metadata_csv_path) {
 
         const std::string& cord_uid = cols[0];
         const std::string& title = cols[3];
-        const std::string& url = cols[16];  // URL is typically at index 16
+        const std::string& url = cols[17];  // URL is typically at index 16
 
         if (!cord_uid.empty()) {
             // Trim whitespace from cord_uid
