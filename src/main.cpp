@@ -93,20 +93,6 @@ int main()
             continue;
         }
         
-        // ---- SEARCH MODE ----
-        auto results = engine.search(input, lex, fwd, inv, 10);
-
-        if (results.empty()) {
-            std::cout << "No results found.\n\n";
-            continue;
-        }
-        int rank = 1;
-        for (const auto& r : results) {
-            std::cout << rank++ << ". " << r.title << "\n";
-            std::cout << "   URL: " << r.url << "\n";
-            std::cout << "   Score: " << r.score << "\n\n";
-        }
-        
         // ---- SEMANTIC SEARCH MODE ----
         auto semantic_results = semantic_search.semantic_search(input, lex, fwd, 10);
         std::cout << "\n=== SEMANTIC SEARCH RESULTS ===\n";

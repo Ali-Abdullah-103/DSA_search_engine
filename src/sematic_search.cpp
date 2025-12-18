@@ -423,8 +423,6 @@ bool SemanticSearch::load_metadata(const std::string& metadata_csv_path) {
 
         // Check minimum columns needed
         if (cols.size() < 18) {
-            std::cerr << "Warning: Line " << line_num << " has only " 
-                      << cols.size() << " columns\n";
             continue;
         }
 

@@ -4,3 +4,4 @@ build/
 lemmatizer/
 indices/
 embedding/
+web/node_modules/
