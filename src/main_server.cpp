@@ -58,7 +58,7 @@ void print_search_results(const std::vector<SemanticResult>& results) {
 int main()
 {
     // Base path for all data files
-    const std::string BASE_PATH = "D:/DSA Project/DSA_search_engine/";
+    const std::string BASE_PATH = "D:/searchEngine/";
     
     std::cerr << "Starting CORD-19 Search Server..." << std::endl;
     
@@ -92,11 +92,11 @@ int main()
     }
 
     std::cerr << "Loading metadata..." << std::endl;
-    if (!engine.load_metadata_urls(BASE_PATH + "data/data/2020-04-10/metadata.csv")) {
+    if (!engine.load_metadata_urls(BASE_PATH + "data/2020-04-10/metadata.csv")) {
         std::cerr << "Failed to load metadata" << std::endl;
         return 1;
     }
-    semantic_search.load_metadata(BASE_PATH + "data/data/2020-04-10/metadata.csv");
+    semantic_search.load_metadata(BASE_PATH + "data/2020-04-10/metadata.csv");
 
     std::cerr << "Loading GloVe embeddings..." << std::endl;
     if (!semantic_search.load_embeddings_binary(BASE_PATH + "embedding/glove_embeddings.bin")) {
@@ -134,7 +134,7 @@ int main()
         if (command == "SEARCH") {
             auto semantic_results = semantic_search.semantic_search(query, lex, fwd, 10);
             print_search_results(semantic_results);
-        } 
+        }
         else if (command == "AUTOCOMPLETE") {
             auto suggestions = autocomplete.suggest(query, lex, 10);
             print_autocomplete_results(suggestions);
@@ -147,6 +147,5 @@ int main()
             print_json_error("Invalid command. Use SEARCH, AUTOCOMPLETE, or EXIT");
         }
     }
-
     return 0;
 }

@@ -7,13 +7,14 @@ set(CMAKE_CXX_COMPILER g++)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Get all source files EXCEPT main.cpp and main_web.cpp
-file(GLOB ALL_SRC_FILES "${CMAKE_SOURCE_DIR}/src/*.cpp")
+file(GLOB ALL_SRC_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/src/*.cpp")
 file(GLOB HEADER_FILES "${CMAKE_SOURCE_DIR}/include/*.hpp")
 
 # Create a list of common source files (without any main files)
 set(COMMON_SRC_FILES ${ALL_SRC_FILES})
-list(REMOVE_ITEM COMMON_SRC_FILES 
+list(REMOVE_ITEM COMMON_SRC_FILES
     "${CMAKE_SOURCE_DIR}/src/main.cpp"
+    "${CMAKE_SOURCE_DIR}/src/main_server.cpp"
     "${CMAKE_SOURCE_DIR}/src/main_web.cpp"
 )
 

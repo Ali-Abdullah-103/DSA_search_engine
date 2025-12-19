@@ -42,7 +42,7 @@ std::string MetadataParser::extract_first_sha(const std::string& sha) const {
 
 std::string MetadataParser::get_file_path(const std::string& pmcid, const std::string& sha) const
 {
-    const std::string data_path = "D:/DSA Project/DSA_search_engine/data/data/2020-04-10";
+    const std::string data_path = "D:/searchEngine/data/2020-04-10";
         // Try SHA-based PDF JSON
     std::string first_sha = extract_first_sha(sha);
     if (!first_sha.empty()) {
@@ -108,7 +108,7 @@ int MetadataParser::metadata_parse(Lexicon& lex,
                                    InvertedIndex& inv,
                                    size_t max_docs) 
 {
-    std::ifstream csv("D:/DSA Project/DSA_search_engine/data/data/2020-04-10/metadata.csv");
+    std::ifstream csv("D:/searchEngine/data/2020-04-10/metadata.csv");
     if (!csv.is_open()) {
         std::cerr << "Error: Cannot open metadata.csv\n";
         return 0;

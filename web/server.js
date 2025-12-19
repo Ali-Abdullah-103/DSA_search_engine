@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.static('public'));
 
 // Path to your C++ server executable
-const CPP_SERVER = 'D:\\DSA Project\\DSA_search_engine\\build\\main_server.exe';
+const CPP_SERVER = 'D:/searchEngine/build/main_server.exe';
 console.log('Looking for executable at:', CPP_SERVER);
 
 // Verify the executable exists
@@ -30,7 +30,7 @@ let isReady = false;
 let pendingRequests = [];
 
 function startCppServer() {
-    console.log('🔧 Starting C++ search server...');
+    console.log(' Starting C++ search server...');
     
     cppProcess = spawn(CPP_SERVER);
     
@@ -39,37 +39,40 @@ function startCppServer() {
         crlfDelay: Infinity
     });
 
-    // Handle stdout (JSON responses)
+        // Handle stdout (JSON responses)
     rl.on('line', (line) => {
-        console.log('C++ output:', line);
-        
-        try {
-            const response = JSON.parse(line);
-            
-            // Check if this is the ready signal
-            if (response.status === 'ready') {
-                isReady = true;
-                console.log('✅ C++ server is ready!');
-                
-                // Process any pending requests
-                while (pendingRequests.length > 0) {
-                    const req = pendingRequests.shift();
-                    req.process();
+        line = line.trim();
+
+        // If it's valid JSON-like
+        if (line.startsWith("{") && line.endsWith("}")) {
+            try {
+                const response = JSON.parse(line);
+
+                // Ready signal
+                if (response.status === 'ready') {
+                    isReady = true;
+                    console.log('⚡ C++ server is ready!');
+                    while (pendingRequests.length > 0) {
+                        const req = pendingRequests.shift();
+                        req.process();
+                    }
+                    return;
                 }
-                return;
+
+                // Normal JSON response
+                if (pendingRequests.length > 0) {
+                    const req = pendingRequests.shift();
+                    req.resolve(response);
+                }
+            } catch (err) {
+                console.error("❌ Invalid JSON:", line);
             }
-            
-            // Handle normal responses
-            if (pendingRequests.length > 0) {
-                const req = pendingRequests.shift();
-                req.resolve(response);
-            }
-        } catch (err) {
-            console.error('Failed to parse C++ response:', line);
-            if (pendingRequests.length > 0) {
-                const req = pendingRequests.shift();
-                req.reject(new Error('Invalid JSON response'));
-            }
+            return;
+        }
+
+        // Non-JSON log output
+        if (line.length > 0) {
+            console.log("C++ log:", line);
         }
     });
 
@@ -131,19 +134,28 @@ function sendCommand(command, query) {
 // API Routes
 app.get('/api/search', async (req, res) => {
     const query = req.query.q;
-    
+
     if (!query) {
         return res.status(400).json({ error: 'Query parameter "q" is required' });
     }
 
+    const start = process.hrtime(); // ⏱️ START TIME
+
     try {
         const result = await sendCommand('SEARCH', query);
-        res.json(result);
+
+        const diff = process.hrtime(start);
+        const timeMs = (diff[0] * 1e3) + (diff[1] / 1e6);
+
+        res.json({
+            ...result,
+            search_time_ms: timeMs.toFixed(3)
+        });
     } catch (err) {
-        console.error('Search error:', err);
         res.status(500).json({ error: err.message });
     }
 });
+
 
 app.get('/api/autocomplete', async (req, res) => {
     const query = req.query.q;
@@ -171,7 +183,7 @@ app.get('/api/health', (req, res) => {
 
 // Graceful shutdown
 process.on('SIGINT', () => {
-    console.log('\n🛑 Shutting down...');
+    console.log('\n Shutting down...');
     if (cppProcess) {
         cppProcess.stdin.write('EXIT\n');
         setTimeout(() => {
@@ -188,6 +200,6 @@ startCppServer();
 
 // Start Express server
 app.listen(PORT, () => {
-    console.log(`🚀 Node.js server running at http://localhost:${PORT}`);
-    console.log(`⏳ Waiting for C++ server to load indices...`);
+    console.log(` Node.js server running at http://localhost:${PORT}`);
+    console.log(` Waiting for C++ server to load indices...`);
 });

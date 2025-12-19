@@ -11,7 +11,7 @@
 int main()
 {
     // Load lemmatizer
-    load_lemmatizer("D:/DSA Project/DSA_search_engine/lemmatizer/lemmatization-en.txt");
+    load_lemmatizer("D:/searchEngine/lemmatizer/lemmatization-en.txt");
 
     Lexicon lex;
     ForwardIndex fwd;
@@ -21,37 +21,37 @@ int main()
     SemanticSearch semantic_search;
 
     // Load indexes
-    if (!lex.load("D:/DSA Project/DSA_search_engine/indices/lexicon.csv")) {
+    if (!lex.load("D:/searchEngine/indices/lexicon.csv")) {
         std::cerr << "Failed to load lexicon\n";
         return 1;
     }
 
-    if (!fwd.load_from_file("D:/DSA Project/DSA_search_engine/indices/forward_index.txt")) {
+    if (!fwd.load_from_file("D:/searchEngine/indices/forward_index.txt")) {
         std::cerr << "Failed to load forward index\n";
         return 1;
     }
 
-    if (!inv.load_from_file("D:/DSA Project/DSA_search_engine/indices/inverted_index")) {
+    if (!inv.load_from_file("D:/searchEngine/indices/inverted_index")) {
         std::cerr << "Failed to load inverted index\n";
         return 1;
     }
 
     // Load metadata (title + URL)
-    if (!engine.load_metadata_urls("D:/DSA Project/DSA_search_engine/data/data/2020-04-10/metadata.csv")) {
+    if (!engine.load_metadata_urls("D:/searchEngine/data/2020-04-10/metadata.csv")) {
         std::cerr << "Failed to load metadata\n";
         return 1;
     }
-    semantic_search.load_metadata("D:/DSA Project/DSA_search_engine/data/data/2020-04-10/metadata.csv");
+    semantic_search.load_metadata("D:/searchEngine/data/2020-04-10/metadata.csv");
 
     std::cout << "\nLoading GloVe word embeddings...\n";
-    if (!semantic_search.load_embeddings_binary("D:/DSA Project/DSA_search_engine/embedding/glove_embeddings.bin")) {
+    if (!semantic_search.load_embeddings_binary("D:/searchEngine/embedding/glove_embeddings.bin")) {
         std::cerr << "Error: Cannot load GloVe embeddings from bin/glove_embeddings.bin\n";
         std::cerr << "Make sure you have created this file first!\n";
         return 1;
     }
     std::cout << "Loading document embeddings...\n";
     
-    if (!semantic_search.load_document_embeddings("D:/DSA Project/DSA_search_engine/embedding/doc_embeddings.bin")) {
+    if (!semantic_search.load_document_embeddings("D:/searchEngine/embedding/doc_embeddings.bin")) {
         std::cerr << "Error: Cannot load document embeddings from bin/doc_embeddings.bin\n";
         std::cerr << "Make sure you have created this file first!\n";
         return 1;

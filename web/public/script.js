@@ -24,6 +24,15 @@ async function performSearch(query) {
         const response = await fetch(`${API_BASE}/search?q=${encodeURIComponent(query)}`);
         const data = await response.json();
 
+        const resultsCount = data.results ? data.results.length : 0;
+        if (data.search_time_ms) {
+            document.getElementById("searchTime").innerText = 
+                `About ${resultsCount} results (${data.search_time_ms} ms)`;
+        } else {
+            document.getElementById("searchTime").innerText = 
+                `About ${resultsCount} results`;
+        }
+
         loadingDiv.classList.add('hidden');
 
         if (data.error) {

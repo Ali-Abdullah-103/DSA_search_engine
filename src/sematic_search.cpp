@@ -439,11 +439,12 @@ bool SemanticSearch::load_metadata(const std::string& metadata_csv_path) {
             corduid_to_meta[trimmed_uid] = {title, url};
             loaded_count++;
             
-            // Debug first few entries
+            /* Debug first few entries
             if (loaded_count <= 3) {
                 std::cout << "  Sample " << loaded_count << ": cord_uid='" 
                           << trimmed_uid << "', title='" << title << "'\n";
             }
+            */
         }
     }
 

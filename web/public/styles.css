@@ -24,6 +24,18 @@ body {
     margin-bottom: 30px;
 }
 
+
+.search-time {
+    margin: 10px 0;
+    font-size: 14px;
+    color: #1a73e8; /* Google blue */
+    background-color: #f1f3f4; /* light white/gray background */
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: inline-block;
+    font-family: 'Courier New', Courier, monospace; /* code-like font */
+}
+
 .logo {
     font-size: 72px;
     font-weight: 400;
